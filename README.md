@@ -8,7 +8,7 @@ CAN Bus testing device used to run CAN loggers at full bus load.
 - Self tests to isolate the testing system and verify it works
 
 ## Test Box Structure
-- Block Diagram
+![alt text](CANBusTester.drawio.png)
 
 ## Hardware implementation
 - Hardware description
