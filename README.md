@@ -1,5 +1,5 @@
 # CANBusTester
-CAN Bus testing device used to run CAN loggers at full bus load
+CAN Bus testing device used to run CAN loggers at full bus load.
 
 ## Requirements
 - Operates at 100% bus load
