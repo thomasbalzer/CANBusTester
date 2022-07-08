@@ -5,7 +5,7 @@ CAN Bus testing device used to run CAN loggers at full bus load.
 - Operates at 100% bus load
 - Universal compatibility with test subjects
 - Fast and simple to use
-- Self tests to isolate the testing system and verify it works
+- Implements self tests to isolate the testing system and verify it works
 
 ## Test Box Structure
 ![alt text](CANBusTester.drawio.png)
