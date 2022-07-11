@@ -1,5 +1,5 @@
 # CANBusTester
-CAN bus testing device used to stress test CAN logging devices at full bus load.
+system used to stress test CAN logging devices at full bus load.
 
 ## Requirements
 - Operates at 100% bus load
