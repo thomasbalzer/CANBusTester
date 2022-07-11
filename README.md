@@ -20,6 +20,7 @@ System used to stress test CAN logging devices at full bus load.
 * **CAN Logger 3**
   - Flood CAN0-2
     * Floods the bus at 100% bus load to obersve if any packets get dropped
+    * Push buttons can be used to start and stop test in addition to UI
 * **Test Subject**
   - Logs can data
     * Outputs CAN data into a log file that determines wether the test was passed
