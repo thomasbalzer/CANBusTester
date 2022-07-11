@@ -10,5 +10,7 @@ System used to stress test CAN logging devices at full bus load.
 ## Test System Block Diagram
 ![alt text](CANBusTester.drawio.png)
 
-## Hardware implementation
-- Hardware description
+## Implementation
+* Raspberry pi
+  - User Interface
+    * allows for flooding the bus with start and stop commands
