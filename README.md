@@ -14,7 +14,7 @@ System used to stress test CAN logging devices at full bus load.
 * **Raspberry pi**
   - User Interface
     * Allows for flooding the bus with start and stop commands to the CAN Logger 3
-    * allows for configuring and running self tests
+    * Configuring and running self tests
   - CAN Shield
     * Checks to see if voltage and resistance on the CAN bus are correct
 * **CAN Logger 3**
