@@ -22,4 +22,4 @@ System used to stress test CAN logging devices at full bus load.
     * Floods the bus at 100% bus load to obersve if any packets get dropped
 * **Test Subject**
   - Logs can data
-    * Outputs can data into a log file that determines wether the test was passed
+    * Outputs CAN data into a log file that determines wether the test was passed
