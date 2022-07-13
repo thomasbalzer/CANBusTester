@@ -3,7 +3,7 @@ System used to stress test CAN logging devices at full bus load.
 
 ## Requirements
 - Operates at 100% bus load
-- Test Subject outputs a log file to determine wether the test was successful
+- Test Subject outputs a log file to determine if the test was successful
 - Doesn't rely on an operating system
 - Implements self tests to isolate the testing system and verify it works
 
