@@ -24,6 +24,8 @@ System used to stress test CAN logging devices at full bus load.
 * **Test Subject**
   - Logs can data
     * Outputs CAN data into a log file that determines wether the test was passed
-* **Test Case**
 
-* **Test Results**
+## Test Plan
+* **CAN Logger 3**
+  - In order to find out wether a single CAN Logger 3(CL3) could handle sending and receiving messages on two separate can lines the device was set to send messages with a 630us interval or 100% bus load. The figure below is an example of a CL3 both sending and receiving on Can0 and Can1.
+  ![singleCL3](figures/CANLogger3SingleTest.png)
