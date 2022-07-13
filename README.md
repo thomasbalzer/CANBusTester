@@ -3,7 +3,7 @@ System used to stress test CAN logging devices at full bus load.
 
 ## Requirements
 - Operates at 100% bus load
-- Works with all test subject platforms
+- Works with Linux devices running CanUtils
 - Doesn't rely on an operating system
 - Implements self tests to isolate the testing system and verify it works
 
