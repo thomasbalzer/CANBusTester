@@ -24,6 +24,6 @@ System used to stress test CAN logging devices at full bus load.
 * **Test Subject**
   - Logs can data
     * Outputs CAN data into a log file that determines wether the test was passed
-* **Test Plan**
+* **Test Case**
 
 * **Test Results**
