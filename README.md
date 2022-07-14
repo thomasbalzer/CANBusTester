@@ -33,6 +33,6 @@ System used to stress test CAN logging devices at full bus load.
   
   - Truck Cape was used to verify network usage was at 100%
 
-  <img src="figures/busloadMeasurement.png" height="250" width="425"/>
+  <img src="figures/busloadMeasurement.png" height="500" width="425"/>
   
 
