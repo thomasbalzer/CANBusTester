@@ -8,7 +8,7 @@ System used to stress test CAN logging devices at full bus load.
 - Implements self tests to isolate the testing system and verify it works
 
 ## Test System Block Diagram
-![alt text](figures/CANBusTester.drawio.png)
+![alt text](CANBusTester.drawio.png)
 
 ## Implementation
 * **Raspberry pi**
