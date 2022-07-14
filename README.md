@@ -33,4 +33,5 @@ System used to stress test CAN logging devices at full bus load.
   
   
   - The same test was performed with two CL3s where one is sending and the other is receiving.
+  
   ![singleCL3](figures/CANLogger3SeparateTest.png)
