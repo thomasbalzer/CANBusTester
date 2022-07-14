@@ -27,12 +27,12 @@ System used to stress test CAN logging devices at full bus load.
 
 ## Test Case
 * **CAN Logger 3**
-  - To find out wether a single CAN Logger 3(CL3) could handle sending and receiving messages on two separate CAN lines at 100% bus load the device was set to send messages with a 630us interval. The figure below is an example of a CL3 both sending and receiving on Can0 and Can1.
+  - To find out wether a single CAN Logger 3 could handle sending and receiving messages on two separate CAN lines at 100% bus load the device was set to send messages with a 630us interval. The figure below is a comparison between using only one CAN logger(left) and two CAN Loggers(right). It can be seen that the single CAN Logger dropped a significant amount of frames.
 
-  ![singleCL3](figures/CANLogger3SingleTest.png) ![singleCL3](figures/CANLogger3SeparateTest.png)
+  <img src="figures/CANLogger3SingleTest.png" height="250" width="425"/> <img src="figures/CANLogger3SeparateTest.png" height="250" width="425"/> 
   
-  - The same test was performed with two CL3s where one is sending and the other is receiving.
-  
-  ![singleCL3](figures/CANLogger3SeparateTest.png)
+  - Truck Cape was used to verify network usage was at 100%
+
+  <img src="figures/busloadMeasurement.png" height="250" width="425"/>
   
 
