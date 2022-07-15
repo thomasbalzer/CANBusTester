@@ -1,5 +1,5 @@
 # CANBusTester
-System used to stress test CAN logging devices at full bus load.
+Most Can Logging devices on the market rely on heavy operating systems such as Linux in order to run the software needed to log CAN data. These operating systems utilize interupts to perform many different tasks on the machine which leads to frames being lost on the CAN bus while at 100% network capacity.
 
 ## Requirements
 - Operates at 100% bus load
