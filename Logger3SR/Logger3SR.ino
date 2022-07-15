@@ -11,7 +11,6 @@ static CAN_message_t rxmsg1;
 //Set up timing variables (Use prime numbers so they don't overlap)
 #define TXPeriod 630
 elapsedMicros TXTimer;
-
 unsigned long previousMillis = 0;
 
 //Define button pin, the button is soldered on SW21
@@ -177,7 +176,6 @@ void loop() {
     newData = false;
   }
 }
-
 
 //A generic CAN Frame print function for the Serial terminal
 void printFrame(CAN_message_t rxmsg, uint8_t channel, uint32_t RXCount)
