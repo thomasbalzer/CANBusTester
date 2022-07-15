@@ -1,4 +1,6 @@
-#include <FlexCAN.h>
+#include <FlexCAN_T4.h>
+FlexCAN_T4<CAN0, RX_SIZE_256, TX_SIZE_16> Can0;
+FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can1;
 
 //Define message from FlexCAN library
 static CAN_message_t txmsg0;
@@ -51,15 +53,17 @@ boolean BLUE_LED_state;
 void setup() {
   // put your setup code here, to run once:
   //Set baudrate
-  Can1.begin(BAUDRATE250K);
-  Can0.begin(BAUDRATE250K);
+  Can1.begin();
+  Can0.begin();
+  Can1.setBaudRate(BAUDRATE250K);
+  Can0.setBaudRate(BAUDRATE250K);
 
   //Set message extension, ID, and length
-  txmsg0.ext = 1;
+  txmsg0.flags.extended = 1;
   txmsg0.id = 0x100;
   txmsg0.len = 8;
 
-  txmsg1.ext = 1;
+  txmsg1.flags.extended = 1;
   txmsg1.id = 0x101;
   txmsg1.len = 8;
 
@@ -79,13 +83,6 @@ void setup() {
   pinMode(button1, INPUT_PULLUP);
   pinMode(button2, INPUT_PULLUP);
 
-  //The default filters exclude the extended IDs, so we have to set up CAN filters to allow those to pass.
-  CAN_filter_t allPassFilter;
-  allPassFilter.ext = 1;
-  for (uint8_t filterNum = 0; filterNum < 8; filterNum++) { //only use half the available filters for the extended IDs
-    Can0.setFilter(allPassFilter, filterNum);
-    Can1.setFilter(allPassFilter, filterNum);
-  }
 }
 
 void loop() {
@@ -107,20 +104,18 @@ void loop() {
   }
 
   if (toggle) {
-    if (Can0.available()) {
+    if (Can0.read(rxmsg0)) {
       previousMillis = currentMillis;
       newData = true;
-      Can0.read(rxmsg0);
       printFrame(rxmsg0, 0, RXCount0++);
       //RXCount0++;
       //Toggle the LED
       GREEN_LED_state = !GREEN_LED_state;
       digitalWrite(GREEN_LED_PIN, GREEN_LED_state);
     }
-    if (Can1.available()) {
+    if (Can1.read(rxmsg1)) {
       previousMillis = currentMillis;
       newData = true;
-      Can1.read(rxmsg1);
       printFrame(rxmsg1, 1, RXCount1++);
       //RXCount1++;
       //Toggle the LED
@@ -144,7 +139,7 @@ void loop() {
       txmsg0.buf[7] = (TXCount0 & 0x000000FF);
 
       //Write the message on CAN channel 0
-      Can0.write(txmsg0);
+      //Can0.write(txmsg0);
       TXCount0++;
 
       //Toggle the LED
@@ -174,7 +169,7 @@ void loop() {
     }
 
   }
-  if (((unsigned long)(currentMillis - previousMillis) >= 2000) && newData == true) {
+  if (((unsigned long)(currentMillis - previousMillis) >= 9000) && newData == true) {
     Serial.println(RXCount0);
     Serial.println(RXCount1);
     RXCount0 = 0;
@@ -188,7 +183,7 @@ void loop() {
 void printFrame(CAN_message_t rxmsg, uint8_t channel, uint32_t RXCount)
 {
   char CANdataDisplay[50];
-  sprintf(CANdataDisplay, "%d %12lu %12lu %08X %d %d", channel, RXCount, micros(), rxmsg.id, rxmsg.ext, rxmsg.len);
+  sprintf(CANdataDisplay, "%d %12lu %12lu %08X %d %d", channel, RXCount, micros(), rxmsg.id, rxmsg.flags.extended, rxmsg.len);
   Serial.print(CANdataDisplay);
   for (uint8_t i = 0; i < rxmsg.len; i++) {
     char CANBytes[4];
