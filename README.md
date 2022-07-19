@@ -37,8 +37,8 @@ Can Logging devices on the market rely on heavy operating systems such as Linux 
   - Logs can data
     * Outputs CAN data into a log file that determines wether the test was passed
 
-## Test Case
-* **CAN Logger 3**
+## Test Plan
+* **Test Case - Sending/Receiving on 2 Bus Lines**
   - To find out wether a single CAN Logger 3 could handle sending and receiving messages on two separate CAN lines at 100% bus load the device was set to send messages with a 630us interval. The figure below is a comparison between using only one CAN logger(left) and two CAN Loggers(right). It can be seen that the single CAN Logger dropped a significant amount of frames.
 
   <img src="figures/CANLogger3SingleTest.png" height="250" width="425"/> <img src="figures/CANLogger3SeparateTest.png" height="250" width="425"/> 
