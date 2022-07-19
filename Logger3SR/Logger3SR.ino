@@ -48,8 +48,10 @@ boolean BLUE_LED_state;
 #define BAUDRATE250K 250000
 
 void setup() {
+  
   // put your setup code here, to run once:
   //Set baudrate
+  Serial.begin(115200); delay(400);
   Can1.begin();
   Can0.begin();
   Can1.setBaudRate(BAUDRATE250K);
@@ -116,7 +118,7 @@ void loop() {
       printFrame(rxmsg1, 1, RXCount1++);
       //RXCount1++;
       //Toggle the LED
-      RED_LED_state = !RED_LED_state;
+      RED_LED_state = !RED_LED_state; 
       digitalWrite(RED_LED_PIN, RED_LED_state);
     }
     while (!Can0.write(txmsg0));
