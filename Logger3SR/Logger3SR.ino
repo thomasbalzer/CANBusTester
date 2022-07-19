@@ -9,7 +9,6 @@ static CAN_message_t rxmsg0;
 static CAN_message_t rxmsg1;
 
 //Set up timing variables (Use prime numbers so they don't overlap)
-#define TXPeriod 630
 elapsedMicros TXTimer;
 unsigned long previousMillis = 0;
 
@@ -47,7 +46,6 @@ boolean BLUE_LED_state;
 
 //Define default baudrate
 #define BAUDRATE250K 250000
-#define BAUDRATE500K 500000
 
 void setup() {
   // put your setup code here, to run once:
@@ -121,54 +119,55 @@ void loop() {
       RED_LED_state = !RED_LED_state;
       digitalWrite(RED_LED_PIN, RED_LED_state);
     }
-    if (TXTimer >= TXPeriod) {
-      TXTimer = 0;//Reset Timer
+    while (!Can0.write(txmsg0));
+    TXTimer = 0;//Reset Timer
 
-      //Convert the 32-bit timestamp into 4 bytes with the most significant byte (MSB) first (Big endian).
-      uint32_t sysMicros = micros();
-      txmsg0.buf[0] = (sysMicros & 0xFF000000) >> 24;
-      txmsg0.buf[1] = (sysMicros & 0x00FF0000) >> 16;
-      txmsg0.buf[2] = (sysMicros & 0x0000FF00) >>  8;
-      txmsg0.buf[3] = (sysMicros & 0x000000FF);
+    //Convert the 32-bit timestamp into 4 bytes with the most significant byte (MSB) first (Big endian).
+    uint32_t sysMicros = micros();
+    txmsg0.buf[0] = (sysMicros & 0xFF000000) >> 24;
+    txmsg0.buf[1] = (sysMicros & 0x00FF0000) >> 16;
+    txmsg0.buf[2] = (sysMicros & 0x0000FF00) >>  8;
+    txmsg0.buf[3] = (sysMicros & 0x000000FF);
 
-      //Convert the 32-bit transmit counter into 4 bytes with the most significant byte (MSB) first (Big endian).
-      txmsg0.buf[4] = (TXCount0 & 0xFF000000) >> 24;
-      txmsg0.buf[5] = (TXCount0 & 0x00FF0000) >> 16;
-      txmsg0.buf[6] = (TXCount0 & 0x0000FF00) >>  8;
-      txmsg0.buf[7] = (TXCount0 & 0x000000FF);
+    //Convert the 32-bit transmit counter into 4 bytes with the most significant byte (MSB) first (Big endian).
+    txmsg0.buf[4] = (TXCount0 & 0xFF000000) >> 24;
+    txmsg0.buf[5] = (TXCount0 & 0x00FF0000) >> 16;
+    txmsg0.buf[6] = (TXCount0 & 0x0000FF00) >>  8;
+    txmsg0.buf[7] = (TXCount0 & 0x000000FF);
 
-      //Write the message on CAN channel 0
-      //Can0.write(txmsg0);
-      TXCount0++;
+    //Write the message on CAN channel 0
+    Can0.write(txmsg0);
+    TXCount0++;
 
-      //Toggle the LED
-      BLUE_LED_state = !BLUE_LED_state;
-      digitalWrite(BLUE_LED_PIN, BLUE_LED_state);
-      //Serial.print("CAN0 Message Sent: ");
-      //Serial.println(TXCount0);
-      txmsg1.buf[0] = (sysMicros & 0xFF000000) >> 24;
-      txmsg1.buf[1] = (sysMicros & 0x00FF0000) >> 16;
-      txmsg1.buf[2] = (sysMicros & 0x0000FF00) >>  8;
-      txmsg1.buf[3] = (sysMicros & 0x000000FF);
+    while (!Can1.write(txmsg1));
+    //Toggle the LED
+    BLUE_LED_state = !BLUE_LED_state;
+    digitalWrite(BLUE_LED_PIN, BLUE_LED_state);
+    //Serial.print("CAN0 Message Sent: ");
+    //Serial.println(TXCount0);
+    txmsg1.buf[0] = (sysMicros & 0xFF000000) >> 24;
+    txmsg1.buf[1] = (sysMicros & 0x00FF0000) >> 16;
+    txmsg1.buf[2] = (sysMicros & 0x0000FF00) >>  8;
+    txmsg1.buf[3] = (sysMicros & 0x000000FF);
 
-      //Convert the 32-bit transmit counter into 4 bytes with the most significant byte (MSB) first (Big endian).
-      txmsg1.buf[4] = (TXCount1 & 0xFF000000) >> 24;
-      txmsg1.buf[5] = (TXCount1 & 0x00FF0000) >> 16;
-      txmsg1.buf[6] = (TXCount1 & 0x0000FF00) >>  8;
-      txmsg1.buf[7] = (TXCount1 & 0x000000FF);
+    //Convert the 32-bit transmit counter into 4 bytes with the most significant byte (MSB) first (Big endian).
+    txmsg1.buf[4] = (TXCount1 & 0xFF000000) >> 24;
+    txmsg1.buf[5] = (TXCount1 & 0x00FF0000) >> 16;
+    txmsg1.buf[6] = (TXCount1 & 0x0000FF00) >>  8;
+    txmsg1.buf[7] = (TXCount1 & 0x000000FF);
 
-      //Write the message on CAN channel 1
-      Can1.write(txmsg1);
-      TXCount1++;
-      //Toggle the LED
-      YELLOW_LED_state = !YELLOW_LED_state;
-      digitalWrite(YELLOW_LED_PIN, YELLOW_LED_state);
-      //Serial.print("CAN1 Message Sent: ");
-      //Serial.println(TXCount1);
-    }
-
+    //Write the message on CAN channel 1
+    Can1.write(txmsg1);
+    TXCount1++;
+    //Toggle the LED
+    YELLOW_LED_state = !YELLOW_LED_state;
+    digitalWrite(YELLOW_LED_PIN, YELLOW_LED_state);
+    //Serial.print("CAN1 Message Sent: ");
+    //Serial.println(TXCount1);
   }
-  if (((unsigned long)(currentMillis - previousMillis) >= 9000) && newData == true) {
+
+  if (((currentMillis - previousMillis) >= 9000) && newData == true) {
+    previousMillis = currentMillis;
     Serial.println(RXCount0);
     Serial.println(RXCount1);
     RXCount0 = 0;
@@ -177,16 +176,17 @@ void loop() {
   }
 }
 
-//A generic CAN Frame print function for the Serial terminal
-void printFrame(CAN_message_t rxmsg, uint8_t channel, uint32_t RXCount)
-{
-  char CANdataDisplay[50];
-  sprintf(CANdataDisplay, "%d %12lu %12lu %08X %d %d", channel, RXCount, micros(), rxmsg.id, rxmsg.flags.extended, rxmsg.len);
-  Serial.print(CANdataDisplay);
-  for (uint8_t i = 0; i < rxmsg.len; i++) {
-    char CANBytes[4];
-    sprintf(CANBytes, " %02X", rxmsg.buf[i]);
-    Serial.print(CANBytes);
+
+  //A generic CAN Frame print function for the Serial terminal
+  void printFrame(CAN_message_t rxmsg, uint8_t channel, uint32_t RXCount)
+  {
+    char CANdataDisplay[50];
+    sprintf(CANdataDisplay, "%d %12lu %12lu %08X %d %d", channel, RXCount, micros(), rxmsg.id, rxmsg.flags.extended, rxmsg.len);
+    Serial.print(CANdataDisplay);
+    for (uint8_t i = 0; i < rxmsg.len; i++) {
+      char CANBytes[4];
+      sprintf(CANBytes, " %02X", rxmsg.buf[i]);
+      Serial.print(CANBytes);
+    }
+    Serial.println();
   }
-  Serial.println();
-}
