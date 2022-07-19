@@ -1,4 +1,4 @@
-# CANBusTester Goal
+# CANBusTester
 The goal of this device is to test the perfomance of CAN logging devices by measuring the amount of dropped packets.
 
 ## Requirements
