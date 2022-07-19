@@ -1,24 +1,25 @@
-# CANBusTester
-Can Logging devices on the market rely on heavy operating systems such as Linux in order to run the software needed to log CAN data. These operating systems utilize interupts to perform many different tasks on the machine which leads to frames being lost on the CAN bus while at 100% network capacity. The goal of this device is to create a testing envirnment where the test subject is reading CAN data at 100% and the number of packets lost is recorded and displayed in the test results.
-
-
-
-*Device Goal - Test the performance of can logging devices
-
-*What does my canbus tester measure
+# CANBusTester Goal
+The goal of this device is to test the perfomance of CAN logging devices by measuring the amount of dropped packets.
 
 ## Requirements
 - Measure performance of CAN Bus logging devices (Now add Subrequirements)
+  - How many packets dropped
+  - Minimum bus load before packets start dropping
+  - How long can it handle full bus load before packet loss
 - Operates at 100% bus load indefinitely
-- Test subject outputs a log file(needs log parameters as subrequirement) 
+- Test subject outputs a log file(needs log parameters as subrequirement)
+  - Log file needs time, extended ID, and data
 - Device requires SocketCAN to work
 - CAN bus tester is able to test any CAN bus logging device
 - This device will support multiple I/O connection types (list types as subreq.)
+  - D-sub 9
+  - D-sub 15
+  - Mini USB
 - Implements self tests to isolate the testing system and verify it works
-- Number of CAN lines
-
+- Sends and receives on one CAN line
 ## Test System Block Diagram
 ![alt text](CANBusTester.drawio.png)
+
 -Look at activity diagrams/action flow diagram Ex: ATM
 - Split into two block diagrams physical and functional
 
@@ -30,7 +31,7 @@ Can Logging devices on the market rely on heavy operating systems such as Linux 
   - CAN Shield
     * Checks to see if voltage and resistance on the CAN bus are correct
 * **CAN Logger 3**
-  - Flood CAN0-2
+  - Flood CAN0
     * Floods the bus at 100% bus load to obersve if any packets get dropped
     * Push buttons can be used to start and stop test in addition to UI
 * **Test Subject**
