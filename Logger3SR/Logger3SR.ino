@@ -3,13 +3,14 @@ FlexCAN_T4<CAN0, RX_SIZE_256, TX_SIZE_16> Can0;
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can1;
 
 //Define message from FlexCAN library
+static CAN_message_t txmsg0;
 static CAN_message_t txmsg1;
 static CAN_message_t rxmsg0;
+static CAN_message_t rxmsg1;
 
 //Set up timing variables (Use prime numbers so they don't overlap)
-elapsedMicros TXTimer;
-unsigned long previousMillis = 0;
-
+elapsedMicros RXTimer;
+elapsedMillis blinkTimer;
 //Define button pin, the button is soldered on SW21
 #define button1 28
 #define button2 53
@@ -52,13 +53,11 @@ void setup() {
   Can1.begin();
   Can0.begin();
   Can1.setBaudRate(BAUDRATE250K);
-  Can1.setMB((FLEXCAN_MAILBOX)6, TX, EXT);
-  Can1.enableMBInterrupts();
-  Can1.onTransmit(MB6, canSend);
+
   Can0.setBaudRate(BAUDRATE250K);
   Can0.setMB((FLEXCAN_MAILBOX)0, RX, EXT);
   Can0.enableMBInterrupts();
-  Can0.onReceive(MB0, canSniff);
+  Can0.onReceive(MB0,canSniff);
   Can0.mailboxStatus();
 
   //Set message extension, ID, and length
@@ -84,11 +83,15 @@ void setup() {
 }
 
 void loop() {
+  if (blinkTimer > 1000){
+  BLUE_LED_state = !BLUE_LED_state;
+  digitalWrite(BLUE_LED_PIN, BLUE_LED_state);
+  blinkTimer = 0;
+  }
   // put your main code here, to run repeatedly:
   Can0.events();
   buttonState1 = digitalRead(button1);
   buttonState2 = digitalRead(button2);
-  unsigned long currentMillis = micros();
 
   if (buttonState1 == false) {
     toggle = true;
@@ -105,20 +108,19 @@ void loop() {
   if (toggle) {
     while (!Can1.write(txmsg1));
     uint32_t sysMicros = micros();
-
+    YELLOW_LED_state = !YELLOW_LED_state;
+    digitalWrite(YELLOW_LED_PIN, YELLOW_LED_state);
     //Serial.print("CAN0 Message Sent: ");
     //Serial.println(TXCount0);
     txmsg1.buf[0] = (sysMicros & 0xFF000000) >> 24;
     txmsg1.buf[1] = (sysMicros & 0x00FF0000) >> 16;
     txmsg1.buf[2] = (sysMicros & 0x0000FF00) >>  8;
     txmsg1.buf[3] = (sysMicros & 0x000000FF);
-
     //Convert the 32-bit transmit counter into 4 bytes with the most significant byte (MSB) first (Big endian).
     txmsg1.buf[4] = (TXCount1 & 0xFF000000) >> 24;
     txmsg1.buf[5] = (TXCount1 & 0x00FF0000) >> 16;
     txmsg1.buf[6] = (TXCount1 & 0x0000FF00) >>  8;
     txmsg1.buf[7] = (TXCount1 & 0x000000FF);
-
     //Write the message on CAN channel 1
     Can1.write(txmsg1);
     TXCount1++;
@@ -126,13 +128,13 @@ void loop() {
     //Serial.println(TXCount1);
   }
 
-  if (((currentMillis - previousMillis) >= 90000) && newData == true) {
+  if ((RXTimer >= 90000) && newData == true) {
     Serial.println(RXCount0);
     RXCount0 = 0;
     newData = false;
+    Can0.mailboxStatus();
   }
 }
-
 
 //A generic CAN Frame print function for the Serial terminal
 void printFrame(CAN_message_t rxmsg, uint8_t channel, uint32_t RXCount)
@@ -148,16 +150,13 @@ void printFrame(CAN_message_t rxmsg, uint8_t channel, uint32_t RXCount)
   Serial.println();
 }
 
+//Callback function that is run each time a CAN Frame is received
 void canSniff(const CAN_message_t &rxmsg0) {
+  RXTimer = 0;
   newData = true;
   printFrame(rxmsg0, 0, RXCount0++);
   //RXCount0++;
   //Toggle the LED
   GREEN_LED_state = !GREEN_LED_state;
   digitalWrite(GREEN_LED_PIN, GREEN_LED_state);
-}
-
-void canSend(const CAN_message_t &txmsg1) {
-  YELLOW_LED_state = !YELLOW_LED_state;
-  digitalWrite(YELLOW_LED_PIN, YELLOW_LED_state);
 }
