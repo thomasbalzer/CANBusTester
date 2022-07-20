@@ -3,10 +3,8 @@ FlexCAN_T4<CAN0, RX_SIZE_256, TX_SIZE_16> Can0;
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can1;
 
 //Define message from FlexCAN library
-static CAN_message_t txmsg0;
 static CAN_message_t txmsg1;
 static CAN_message_t rxmsg0;
-static CAN_message_t rxmsg1;
 
 //Set up timing variables (Use prime numbers so they don't overlap)
 elapsedMicros TXTimer;
@@ -54,10 +52,13 @@ void setup() {
   Can1.begin();
   Can0.begin();
   Can1.setBaudRate(BAUDRATE250K);
+  Can1.setMB((FLEXCAN_MAILBOX)6, TX, EXT);
+  Can1.enableMBInterrupts();
+  Can1.onTransmit(MB6, canSend);
   Can0.setBaudRate(BAUDRATE250K);
   Can0.setMB((FLEXCAN_MAILBOX)0, RX, EXT);
   Can0.enableMBInterrupts();
-  Can0.onReceive(MB0,canSniff);
+  Can0.onReceive(MB0, canSniff);
   Can0.mailboxStatus();
 
   //Set message extension, ID, and length
@@ -104,8 +105,6 @@ void loop() {
   if (toggle) {
     while (!Can1.write(txmsg1));
     uint32_t sysMicros = micros();
-    YELLOW_LED_state = !YELLOW_LED_state;
-    digitalWrite(YELLOW_LED_PIN, YELLOW_LED_state);
 
     //Serial.print("CAN0 Message Sent: ");
     //Serial.println(TXCount0);
@@ -156,4 +155,9 @@ void canSniff(const CAN_message_t &rxmsg0) {
   //Toggle the LED
   GREEN_LED_state = !GREEN_LED_state;
   digitalWrite(GREEN_LED_PIN, GREEN_LED_state);
+}
+
+void canSend(const CAN_message_t &txmsg1) {
+  YELLOW_LED_state = !YELLOW_LED_state;
+  digitalWrite(YELLOW_LED_PIN, YELLOW_LED_state);
 }
