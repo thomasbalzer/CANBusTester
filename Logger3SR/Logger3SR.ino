@@ -46,14 +46,14 @@ boolean BLUE_LED_state;
 #define BAUDRATE250K 250000
 
 void setup() {
-
-  // put your setup code here, to run once:
   //Set baudrate
-  Serial.begin(115200); delay(400);
+  Serial.begin(9600);
+  if(!Serial){
+    delay(10000);
+  }
   Can1.begin();
   Can0.begin();
   Can1.setBaudRate(BAUDRATE250K);
-
   Can0.setBaudRate(BAUDRATE250K);
   Can0.setMB((FLEXCAN_MAILBOX)0, RX, EXT);
   Can0.enableMBInterrupts();
