@@ -130,7 +130,6 @@ void loop() {
     Serial.println(RXCount0);
     RXCount0 = 0;
     newData = false;
-    Can0.mailboxStatus();
   }
 }
 
