@@ -23,7 +23,6 @@ bool newData = false;
 uint32_t TXCount1 = 0;
 uint32_t RXCount0 = 0;
 
-
 //Define LED
 #define GREEN_LED_PIN 6
 #define RED_LED_PIN 14
@@ -108,8 +107,6 @@ void loop() {
     uint32_t sysMicros = micros();
     YELLOW_LED_state = !YELLOW_LED_state;
     digitalWrite(YELLOW_LED_PIN, YELLOW_LED_state);
-    //Serial.print("CAN0 Message Sent: ");
-    //Serial.println(TXCount0);
     txmsg1.buf[0] = (sysMicros & 0xFF000000) >> 24;
     txmsg1.buf[1] = (sysMicros & 0x00FF0000) >> 16;
     txmsg1.buf[2] = (sysMicros & 0x0000FF00) >>  8;
