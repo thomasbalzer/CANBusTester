@@ -51,7 +51,7 @@ void setup() {
   
   // put your setup code here, to run once:
   //Set baudrate
-  Serial.begin(115200); delay(400);
+  Serial.begin(115200); delay(10000);
   Can1.begin();
   Can0.begin();
   Can1.setBaudRate(BAUDRATE250K);
