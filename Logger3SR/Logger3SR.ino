@@ -3,10 +3,8 @@ FlexCAN_T4<CAN0, RX_SIZE_256, TX_SIZE_16> Can0;
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can1;
 
 //Define message from FlexCAN library
-static CAN_message_t txmsg0;
 static CAN_message_t txmsg1;
 static CAN_message_t rxmsg0;
-static CAN_message_t rxmsg1;
 
 //Set up timing variables (Use prime numbers so they don't overlap)
 elapsedMicros RXTimer;
