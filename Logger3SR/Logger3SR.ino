@@ -15,6 +15,9 @@ elapsedMillis blinkTimer;
 //Create an on/off boolean for the button
 bool buttonState1;
 bool buttonState2;
+bool buttonState3;
+
+
 
 bool toggle;
 bool newData = false;
